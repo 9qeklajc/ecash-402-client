@@ -37,11 +37,6 @@ async fn main() {
         .await
         .unwrap();
 
-    let seed = env::var("OTRTA_SEED").unwrap();
-    println!(
-        "seed: {}, mint: {}",
-        seed, configuration.application.mint_url
-    );
     let wallet = CashuWalletClient::new(&configuration.application.mint_url, None);
 
     let app_state = Arc::new(AppState {
