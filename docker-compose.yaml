@@ -1,18 +1,18 @@
 services:
-  otrta-ui:
-    container_name: otrta-ui
+  otrta-ui-test:
+    container_name: otrta-ui-test
     build:
       context: ui
     environment:
-      - NEXT_PUBLIC_API_URL=http://otrta-rust:3333
+      - NEXT_PUBLIC_API_URL=http://otrta-rust-test:3333
     networks:
       - otrta-network
     ports:
       - 3332:3000
     restart: unless-stopped
 
-  otrta-rust:
-    container_name: otrta-rust
+  otrta-rust-test:
+    container_name: otrta-rust-test
     build:
       context: otrta
       dockerfile: Dockerfile.client
@@ -30,11 +30,11 @@ services:
     # extra_hosts:
     #   - 'host.docker.internal:host-gateway'
     depends_on:
-      - otrta-db
+      - otrta-db-test
     restart: unless-stopped
 
-  otrta-db:
-    container_name: otrta-db
+  otrta-db-test:
+    container_name: otrta-db-test
     image: postgres:latest
     environment:
       - POSTGRES_USER=postgres
