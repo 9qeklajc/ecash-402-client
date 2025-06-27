@@ -1,16 +1,17 @@
 use axum::{
-    Router,
     routing::{get, post},
+    Router,
 };
-use ecash_402_wallet::wallet::CashuWalletClient;
-use gateway::{
-    connection::{DatabaseSettings, Settings, get_configuration},
+mod connection;
+use connection::{get_configuration, DatabaseSettings, Settings};
+use otrta::{
     db::server_config::{create_with_seed, update_seed},
     handlers::{self, get_server_config},
     models::AppState,
     proxy::{forward_any_request, forward_any_request_get},
 };
-use sqlx::{PgPool, postgres::PgPoolOptions};
+use otrta_wallet::wallet::CashuWalletClient;
+use sqlx::{postgres::PgPoolOptions, PgPool};
 use std::{env, sync::Arc};
 use tower_http::{
     cors::{Any, CorsLayer},
@@ -50,6 +51,11 @@ async fn main() {
 
     let app = Router::new()
         .route("/api/openai-models", get(handlers::list_openai_models))
+        .route("/api/proxy/models", get(handlers::get_proxy_models))
+        .route(
+            "/api/proxy/models/refresh",
+            post(handlers::refresh_models_from_proxy),
+        )
         .route(
             "/api/wallet/redeem-pendings",
             post(handlers::redeem_pendings),

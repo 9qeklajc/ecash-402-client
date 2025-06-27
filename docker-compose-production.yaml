@@ -1,8 +1,7 @@
 services:
   otrta-ui:
-    container_name: otrta-ui
-    build:
-      context: ui
+    container_name: otrta-ui-prod
+    image: 9qeklajc/routstr-client-ui
     environment:
       - NEXT_PUBLIC_API_URL=http://otrta-rust:3333
     networks:
@@ -12,10 +11,8 @@ services:
     restart: unless-stopped
 
   otrta-rust:
-    container_name: otrta-rust
-    build:
-      context: crates
-      dockerfile: Dockerfile.client
+    container_name: otrta-rust-prod
+    image: 9qeklajc/routstr-client
     environment:
       # Runtime Environment
       - RUST_LOG=debug
@@ -48,7 +45,7 @@ services:
     restart: unless-stopped
 
   otrta-db:
-    container_name: otrta-db
+    container_name: otrta-db-prod
     image: postgres:latest
     environment:
       - POSTGRES_USER=postgres
